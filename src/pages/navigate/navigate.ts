@@ -11,6 +11,11 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 declare var google: any;
 
+export interface Location{
+  lat: Number,
+  lng: Number
+}
+
 @IonicPage()
 @Component({
   selector: 'page-navigate',
@@ -18,7 +23,10 @@ declare var google: any;
 })
 export class NavigatePage {
 
+  marker: any;
+  map: any;
   name: string;
+  myLocation: Location;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.navParams.data;
@@ -34,15 +42,38 @@ export class NavigatePage {
   }
   
   initMap() {
-    var myLocation = {lat: -25.363, lng: 131.044};
-    var map = new google.maps.Map(document.getElementById('map'), {
+    this.myLocation = {lat: -25.363, lng: 131.044};
+    console.log(this.myLocation)
+    this.map = new google.maps.Map(document.getElementById('map'), {
       zoom: 4,
-      center: myLocation
+      center: this.myLocation
     });
-    var marker = new google.maps.Marker({
-      position: myLocation,
-      map: map
+    this.marker = new google.maps.Marker({
+      position: this.myLocation,
+      map: this.map
     });
+  }
+
+  locateMe(){
+    const options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0
+    };
+
+    navigator.geolocation.getCurrentPosition(position => {
+      console.log(position);
+      this.myLocation = { 
+        lat: position.coords.latitude, 
+        lng: position.coords.longitude
+      }
+      console.log(this.myLocation)
+      this.marker.setPosition(this.myLocation);
+      this.map.panTo(this.myLocation);
+      this.map.setZoom(15);
+    }, error => {
+      console.error(error);
+    }, options);
   }
 
 }
