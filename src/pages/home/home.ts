@@ -16,4 +16,8 @@ export class HomePage {
     console.log(this.nombre)
   }
 
+  irNavigate(){
+    this.navCtrl.push("NavigatePage", this.nombre)
+  } 
+
 }
