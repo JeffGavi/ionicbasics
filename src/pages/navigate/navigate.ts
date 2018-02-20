@@ -20,7 +20,7 @@ export class NavigatePage {
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.navParams.data;
     //this.name = this.navParams.get("nombre");
-    this.name = this.navParams.data;
+    this.name = this.navParams.get("name");
     console.log(this.name)
 
   }
